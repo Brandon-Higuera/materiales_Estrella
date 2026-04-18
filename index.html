@@ -11,9 +11,12 @@
             --naranja-estrella: #f39c12;
             --negro-footer: #333333;
         }
-        @page{
+
+        /* Configuración global de página */
+        @page {
             margin: 0;
-            size: auto;
+            size: letter;
+            /* Forzamos tamaño carta */
         }
 
         body {
@@ -22,19 +25,47 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            margin: lcm;
+            margin: 0;
+            /* Quitamos el margin lcm que causaba error */
         }
-        /* Estilos de Impresión */
+
+        /* Estilos de Impresión - AQUÍ ESTÁ EL TRUCO */
         @media print {
             .no-print {
                 display: none !important;
             }
 
-            .container {
-                width: 100% !important;
-                max-width: 100% !important;
+            body {
+                margin: 0;
+                padding: 0;
             }
 
+            .container {
+                page-break-inside: avoid;
+                /* Evita que se rompa la nota */
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 0 auto !important;
+                padding: 1cm !important;
+                /* Margen estético para el papel */
+            }
+
+            .header-diseno {
+                margin-bottom: 10px;
+                -webkit-print-color-adjust: exact !important;
+            }
+
+            .footer-nota {
+                position: fixed;
+                /* Mantiene el footer pegado abajo en la hoja */
+                bottom: 0;
+                width: 100%;
+                border-radius: 0;
+                /* Se ve mejor recto en papel */
+                -webkit-print-color-adjust: exact !important;
+            }
+
+            /* Asegura que los colores salgan en la impresión */
             * {
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
@@ -58,7 +89,6 @@
             color: white;
             padding: 20px;
             margin-top: auto;
-            /* Empuja el footer al final */
             border-radius: 0 50px 0 0;
             width: 100%;
         }
@@ -171,7 +201,7 @@
     </div>
 
     <script>
-     
+
 
         // 2. Lógica de Interfaz
         const btnActualizar = document.getElementById("btn-actualizar");
